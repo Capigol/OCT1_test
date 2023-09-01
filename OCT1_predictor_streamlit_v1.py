@@ -30,8 +30,6 @@ import base64
 
 #%% Necessary files and directory
 
-# directorio = str(Path(r"D:\OneDrive - biol.unlp.edu.ar\Lucas_Data\LiADME\Sustrato_NoSUSTRATO_OCT1\replica_modelos"))
-
 file = "smiles_train_neutro.txt" # A .txt file with SMILES without headers.
 
 score_threshold = 0.44
@@ -345,7 +343,7 @@ def calcular_descriptores(data):
 
 def applicability_domain(prediction_set_descriptors, descriptors_model,valor_X):
     
-    descr_training = pd.read_csv(r"models\Descriptores_Training_set_ok1.csv")
+    descr_training = pd.read_csv("models/Descriptores_Training_set_ok1.csv")
     desc = descr_training[descriptors_model]
     t_transpuesto = desc.T
     multi = t_transpuesto.dot(desc)
@@ -415,7 +413,6 @@ def predictions(loaded_model, loaded_desc, X_final1):
     
     dataframe_scores = pd.DataFrame(scores).T
     dataframe_scores.index = smiles_final
-    # dataframe_scores.to_csv(directorio + "\\" + "prueba_scores.csv")
     
     palancas_final = pd.DataFrame(palancas).T
     palancas_final.index = smiles_final
@@ -471,8 +468,8 @@ def filedownload1(df):
 
 # data = pd.read_csv(r"models\ + file ,sep="\t",header=None, encoding='cp1252') 
 
-loaded_model = pickle.load(open(r"models\modelos_finales_maxi.pickle", 'rb'))
-loaded_desc = pickle.load(open(r"models\descriptores_models_maxi.pickle", 'rb'))
+loaded_model = pickle.load(open("models/modelos_finales_maxi.pickle", 'rb'))
+loaded_desc = pickle.load(open("models/descriptores_models_maxi.pickle", 'rb'))
 
 if uploaded_file_1 is not None:
     run = st.button("RUN")
