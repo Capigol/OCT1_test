@@ -466,8 +466,9 @@ def filedownload1(df):
 
 #%% CORRIDA
 
-loaded_model = pickle.load(open("models\modelos_finales_maxi.pickle", 'rb'))
-loaded_desc = pickle.load(open("models\descriptores_models_maxi.pickle", 'rb'))
+loaded_model = pickle.load(open("models/" + "modelos_finales_maxi.pickle", 'rb'))
+#loaded_model = pickle.load(open("models/modelos_finales_maxi.pickle", 'rb'))
+loaded_desc = pickle.load(open("models/descriptores_models_maxi.pickle", 'rb'))
 
 if uploaded_file_1 is not None:
     run = st.button("RUN")
