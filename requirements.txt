@@ -1,0 +1,9 @@
+numpy
+pandas
+Pillow
+streamlit
+openbabel-wheel
+rdkit
+molvs
+mordred
+
