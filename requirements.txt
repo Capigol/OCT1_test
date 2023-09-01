@@ -6,4 +6,4 @@ openbabel-wheel
 rdkit
 molvs
 mordred
-
+plotly
