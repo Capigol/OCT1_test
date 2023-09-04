@@ -566,11 +566,13 @@ text-align: center;
 }
 </style>
 <div class="footer">
-<p>Made in  🐍 and <img style='display: ; ' href="https://streamlit.io" src="https://i.imgur.com/iIOA6kU.png" target="_blank"></img> Developed with ❤️ by <a style='display: ;
- text-align: center' href="https://twitter.com/maxifallico" target="_blank">Maximiliano Fallico</a> for <a style='display:; 
+<p>Made in  🐍 and <img style='display: ; 
+' href="https://streamlit.io" src="https://i.imgur.com/iIOA6kU.png" target="_blank"></img> Developed with ❤️ by <a style='display: ;
+ text-align: center' href="https://twitter.com/maxifallico" target="_blank">Maximiliano Fallico</a> ,  <a style='display:; 
  text-align: center' href="https://twitter.com/capigol" target="_blank">Lucas Alberca</a> and <a style='display: ; 
- text-align: center' href="https://twitter.com/carobellera" target="_blank">Caro Bellera</a> and <a style='display: ; 
+ text-align: center' href="https://twitter.com/carobellera" target="_blank">Caro Bellera</a> for <a style='display: ; 
  text-align: center;' href="https://lideb.biol.unlp.edu.ar/" target="_blank">LIDeB</a></p>
 </div>
 """
 st.markdown(footer,unsafe_allow_html=True)
+
