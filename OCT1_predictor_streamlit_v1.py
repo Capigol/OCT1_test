@@ -6,7 +6,6 @@ Created on Mon Sep 14 17:41:37 2020
 """
 
 
-
 #%% Importing libraries
 
 from pathlib import Path
@@ -30,12 +29,9 @@ import base64
 
 #%% Necessary files and directory
 
-file = "smiles_train_neutro.txt" # A .txt file with SMILES without headers.
+file = "example_file.txt" # A .txt file with SMILES without headers.
 
 score_threshold = 0.44
-valor_X = 2
-
-
 
 #%% PAGE CONFIG
 
@@ -79,21 +75,20 @@ OCT1 Substrate predictor is a Web App that ensemble 14 linear models to classify
 
 The tool uses the following packages [RDKIT](https://www.rdkit.org/docs/index.html), [Mordred](https://github.com/mordred-descriptor/mordred), [MOLVS](https://molvs.readthedocs.io/), [Openbabel](https://github.com/openbabel/openbabel)
 
-The next figure summarizes the results of the model validation:
-    
+**Workflow:**
 """)
 
 
-image = Image.open('OCT1_results.png')
-st.image(image, caption='OCT1 Dataset composition and results')
+image = Image.open('workflow_OCTapp.png')
+st.image(image, caption='OCT1 substrate predictor workflow')
+
 
 #---------------------------------#
 # Sidebar - Collects user input features into dataframe
 st.sidebar.header('Upload your SMILES')
 st.sidebar.markdown("""
-  [Example TXT input file]("smiles_train_neutro.txt")        
+  [Example TXT input file]("https://raw.githubusercontent.com/Capigol/iRaPCA_v1/main/smiles_train_neutro.txt")        
 """)
-# [Example TXT input file](https://raw.githubusercontent.com/Capigol/iRaPCA_v1/main/example_molecules.csv)
 
 uploaded_file_1 = st.sidebar.file_uploader("Upload a TXT file with one SMILES per line", type=["txt"])
 
@@ -299,7 +294,7 @@ def calcular_descriptores(data):
     
     calc = Calculator(descriptors, ignore_3D=True) 
     # t = st.empty()
-
+   
     smiles_ok = []
     for i,smiles in enumerate(smiles_ph_ok):
         if __name__ == "__main__":
@@ -316,18 +311,12 @@ def calcular_descriptores(data):
                         data1x = pd.concat([data1x, solo_nombre],axis=1, ignore_index=True)
                         smiles_ok.append(smiles)
                         t.markdown("Calculating descriptors for molecule: " + str(i +1) +"/" + str(len(smiles_ph_ok)))
-
-                        # t.markdown("Calculating descriptors " + str(i+1) +"/" + str(len(suppl))) 
                     except:
                         
-                        # st.error("**Oh no! There is a problem with descriptor calculation of some SMILES.**  :confused:")
-                        # st.markdown("**Please check your SMILES number: **" + str(i+1))
-                        # st.stop()
-                        st.write(f'\rMolecule {i} has been removed')
+                        st.write(f'\rMolecule {smiles} has been removed (molecule not allowed by Mordred descriptor)')
                 else:
                     pass
 
-    # t.markdown("Descriptor calculation have FINISHED")
     data1x = data1x.T
     descriptores = data1x.set_index('NAME',inplace=False).copy()
     descriptores = descriptores.reindex(sorted(descriptores.columns), axis=1)   
@@ -335,15 +324,14 @@ def calcular_descriptores(data):
     descriptores = descriptores.apply(pd.to_numeric, errors = 'coerce') 
     descriptores["Smiles_OK"] = smiles_ok
     descriptors_total = formal_charge_calculation(descriptores)
-
+    
     return descriptors_total, smiles_ok
-
 
 #%% Determining Applicability Domain (AD)
 
-def applicability_domain(prediction_set_descriptors, descriptors_model,valor_X):
+def applicability_domain(prediction_set_descriptors, descriptors_model):
     
-    descr_training = pd.read_csv("models/Descriptores_Training_set_ok1.csv")
+    descr_training = pd.read_csv(r"models\OCT1_training_DA.csv")
     desc = descr_training[descriptors_model]
     t_transpuesto = desc.T
     multi = t_transpuesto.dot(desc)
@@ -351,9 +339,7 @@ def applicability_domain(prediction_set_descriptors, descriptors_model,valor_X):
     
     # Luego la base de testeo
     desc_sv = prediction_set_descriptors.copy()
-    # desc_sv = desc_sv.drop(["SMILES_OK"], axis = 1)
     sv_transpuesto = desc_sv.T
-    # multi_sv = sv_transpuesto.dot(desc_sv)
     
     multi1 = desc_sv.dot(inversa)
     sv_transpuesto.reset_index(drop=True, inplace=True) 
@@ -361,16 +347,24 @@ def applicability_domain(prediction_set_descriptors, descriptors_model,valor_X):
     diagonal = np.diag(multi2)
     
     # valor de corte para determinar si entra o no en el DA
-    h = valor_X*(desc.shape[1]/desc.shape[0])  ## El h es 3 x Num de descriptores dividido el Num compuestos training
-       
+    
+    h2 = 2*(desc.shape[1]/desc.shape[0])  ## El h es 2 x Num de descriptores dividido el Num compuestos training. Mas estricto
+    h3 = 3*(desc.shape[1]/desc.shape[0])  ##  Mas flexible
+    
     diagonal_comparacion = list(diagonal)
-    resultado_palanca =[]
+    resultado_palanca2 =[]
     for valor in diagonal_comparacion:
-        if valor < h:
-            resultado_palanca.append(True)
+        if valor < h2:
+            resultado_palanca2.append(True)
         else:
-            resultado_palanca.append(False)
-    return resultado_palanca
+            resultado_palanca2.append(False)
+    resultado_palanca3 =[]
+    for valor in diagonal_comparacion:
+        if valor < h3:
+            resultado_palanca3.append(True)
+        else:
+            resultado_palanca3.append(False)         
+    return resultado_palanca2, resultado_palanca3
 
 
 #%% Removing molecules with na in any descriptor
@@ -387,17 +381,41 @@ def all_correct_model(descriptors_total,loaded_desc, smiles_list):
             
     X_final = descriptors_total[total_desc]
     X_final["SMILES_OK"] = smiles_list
-    
+    rows_with_na = X_final[X_final.isna().any(axis=1)]         # Find rows with NaN values
+    for molecule in rows_with_na["SMILES_OK"]:
+        st.write(f'\rMolecule {molecule} has been removed (NA value  in any of the necessary descriptors)')
     X_final1 = X_final.dropna(axis=0,how="any",inplace=False)
     
     smiles_final = X_final1["SMILES_OK"]
     return X_final1, smiles_final
 
-#%% Predictions
+ # Function to assign colors based on confidence values
+def get_color(confidence):
+    """
+    Assigns a color based on the confidence value.
+
+    Args:
+        confidence (float): The confidence value.
+
+    Returns:
+        str: The color in hexadecimal format (e.g., '#RRGGBB').
+    """
+    # Define your color logic here based on confidence
+    if confidence == "HIGH" or confidence == "Substrate":
+        return 'lightgreen'
+    elif confidence == "MEDIUM":
+        return 'yellow'
+    else:
+        return 'red'
+
+
+#%% Predictions        
 
 def predictions(loaded_model, loaded_desc, X_final1):
     scores = []
-    palancas = []
+    palancas2 = []
+    palancas3 = []
+
     i = 0
     
     for estimator in loaded_model:
@@ -407,45 +425,59 @@ def predictions(loaded_model, loaded_desc, X_final1):
         predictions = estimator.predict(X)
     
         scores.append(predictions)
-        resultado_palanca = applicability_domain(X, descriptors_model, valor_X)
-        palancas.append(resultado_palanca)
+        resultado_palanca2, resultado_palanca3  = applicability_domain(X, descriptors_model)
+        palancas2.append(resultado_palanca2)
+        palancas3.append(resultado_palanca3)
         i = i + 1 
     
     dataframe_scores = pd.DataFrame(scores).T
     dataframe_scores.index = smiles_final
     
-    palancas_final = pd.DataFrame(palancas).T
-    palancas_final.index = smiles_final
-    palancas_final['% in DA'] = (palancas_final.sum(axis=1) / len(palancas_final.columns)) * 100
-        
+    palancas_final2 = pd.DataFrame(palancas2).T
+    palancas_final2.index = smiles_final
+    palancas_final2['Confidence'] = (palancas_final2.sum(axis=1) / len(palancas_final2.columns)) * 100
+    
+    palancas_final3 = pd.DataFrame(palancas3).T
+    palancas_final3.index = smiles_final
+    palancas_final3['Confidence3'] = (palancas_final3.sum(axis=1) / len(palancas_final3.columns)) * 100
+
     score_ensemble = dataframe_scores.min(axis=1)
     classification = score_ensemble >= score_threshold
     classification = classification.replace({True: 'Substrate', False: 'Non Substrate'})
-    final_file = pd.concat([classification,palancas_final['% in DA']], axis=1)
+    
+    final_file = pd.concat([classification,palancas_final2['Confidence'], palancas_final3['Confidence3']], axis=1)
+    
     final_file.rename(columns={0: "Prediction"},inplace=True)
-    final_file.loc[final_file["% in DA"] < 50, 'Prediction'] = 'No conclusive'
+    
+    final_file.loc[final_file["Confidence"] >= 50, 'Confidence'] = 'HIGH'
+    final_file.loc[(final_file["Confidence3"] >= 50) & (final_file["Confidence"] != "HIGH"), 'Confidence'] = 'MEDIUM'
+    final_file.loc[final_file["Confidence3"] < 50, 'Confidence'] = 'LOW'
 
-    # final_file['Prediction'] = final_file.apply(lambda row: 'NO' if row['% in DA'] < 50 else row['Prediction'], axis=1)
+    final_file.loc[final_file["Confidence3"] < 50, 'Prediction'] = 'No conclusive'
+    final_file.drop(columns=['Confidence3'],inplace=True)
+            
+    df_no_duplicates = final_file[~final_file.index.duplicated(keep='first')]
+    styled_df = df_no_duplicates.style.apply(lambda row: [f"background-color: {get_color(row['Confidence'])}" for _ in row],subset=["Confidence"], axis=1)
+    
+    return final_file, styled_df
 
-    return final_file
 
 
 #%% Create plot:
 
 
+
+
 def final_plot(final_file):
-    
-        # Count values in 'DA' column less than 50
-    non_conclusives = len(final_file[final_file['% in DA'] < 50])
-    
-    # Count values in 'DA' column higher than 50 and 'class' is 'yes'
-    substrates = len(final_file[(final_file['% in DA'] >= 50) & (final_file['Prediction'] == 'Substrate')])
-    
+    non_conclusives = len(final_file[final_file['Confidence'] == "LOW"]) 
+    substrates_hc = len(final_file[(final_file['Confidence'] == "HIGH") & (final_file['Prediction'] == 'Substrate')])
+    substrates_mc = len(final_file[(final_file['Confidence'] == "MEDIUM") & (final_file['Prediction'] == 'Substrate')])
+
     # Count values in 'DA' column higher than 50 and 'class' is 'no'
-    non_substrates = len(final_file[(final_file['% in DA'] > 50) & (final_file['Prediction'] == 'Non Substrate')])
-    
-    keys = ["Substrate", "Non Substrate", "Non conclusive"]
-    fig = go.Figure(go.Pie(labels=keys, values=[substrates,non_substrates,non_conclusives]))
+    non_substrates_hc = len(final_file[(final_file['Confidence'] == "HIGH") & (final_file['Prediction'] == 'Non Substrate')])
+    non_substrates_mc = len(final_file[(final_file['Confidence'] == "MEDIUM") & (final_file['Prediction'] == 'Non Substrate')])
+    keys = ["Substrate - High confidence", "Substrate - Medium confidence", "Non Substrate - High confidence", "Non Substrate - Medium confidence", "Non conclusive"]
+    fig = go.Figure(go.Pie(labels=keys, values=[substrates_hc, substrates_mc, non_substrates_hc, non_substrates_mc, non_conclusives]))
     
     fig.update_layout(plot_bgcolor = 'rgb(256,256,256)',
                             title_font = dict(size=25, family='Calibri', color='black'),
@@ -453,8 +485,7 @@ def final_plot(final_file):
                             legend_title_font = dict(size=18, family='Calibri', color='black'),
                             legend_font = dict(size=15, family='Calibri', color='black'))
     
-    st.plotly_chart(fig,use_container_width=True)
-    return
+    return fig
 
 
 #%%
@@ -466,9 +497,9 @@ def filedownload1(df):
 
 #%% CORRIDA
 
-loaded_model = pickle.load(open("models/" + "modelos_finales_maxi.pickle", 'rb'))
-#loaded_model = pickle.load(open("models/modelos_finales_maxi.pickle", 'rb'))
-loaded_desc = pickle.load(open("models/descriptores_models_maxi.pickle", 'rb'))
+loaded_model = pickle.load(open(r"models\OCT1_models.pickle", 'rb'))
+loaded_desc = pickle.load(open(r"models\OCT1_descriptors.pickle", 'rb'))
+
 
 if uploaded_file_1 is not None:
     run = st.button("RUN")
@@ -476,8 +507,16 @@ if uploaded_file_1 is not None:
         data = pd.read_csv(uploaded_file_1,sep="\t",header=None)       
         descriptors_total, smiles_list = calcular_descriptores(data)
         X_final1, smiles_final = all_correct_model(descriptors_total,loaded_desc, smiles_list)
-        final_file = predictions(loaded_model, loaded_desc, X_final1)
-        final_plot(final_file)    
+        final_file, styled_df = predictions(loaded_model, loaded_desc, X_final1)
+        figure  = final_plot(final_file)  
+        col1, col2 = st.columns(2)
+
+        with col1:
+            st.header("Predictions")
+            st.write(styled_df)
+        with col2:
+            st.header("Resume")
+            st.plotly_chart(figure,use_container_width=True)
         st.markdown(":point_down: **Here you can download the model results**", unsafe_allow_html=True)
         st.markdown(filedownload1(final_file), unsafe_allow_html=True)
        
@@ -485,17 +524,22 @@ if uploaded_file_1 is not None:
 # Example file
 else:
     st.info('👈🏼👈🏼👈🏼      Awaiting for TXT file to be uploaded.')
-
     if st.button('Press to use Example Dataset'):
         data = pd.read_csv("smiles_train_neutro.txt",sep="\t",header=None)
         descriptors_total, smiles_list = calcular_descriptores(data)
         X_final1, smiles_final = all_correct_model(descriptors_total,loaded_desc, smiles_list)
-        final_file = predictions(loaded_model, loaded_desc, X_final1)
-        final_plot(final_file)    
+        final_file, styled_df = predictions(loaded_model, loaded_desc, X_final1)
+        figure  = final_plot(final_file)  
+        col1, col2 = st.columns(2)
+        with col1:
+            st.header("Predictions")
+            st.write(styled_df)
+        with col2:
+            st.header("Resume")
+            st.plotly_chart(figure,use_container_width=True)
+  
         st.markdown(":point_down: **Here you can download the model results**", unsafe_allow_html=True)
         st.markdown(filedownload1(final_file), unsafe_allow_html=True)
-
-
 
 #Footer edit
 
@@ -525,6 +569,3 @@ text-align: center;
 </div>
 """
 st.markdown(footer,unsafe_allow_html=True)
-
-
-
