@@ -479,11 +479,8 @@ def final_plot(final_file):
                             #font =dict(size=20, family='Calibri'),
                             #legend_title_font = dict(size=18, family='Calibri', color='black'),
                             #legend_font = dict(size=15, family='Calibri', color='black'))
-    fig.update_layout(
-    title_text="Global Emissions 1990-2011",
-    # Add annotations in the center of the donut pies.
-    annotations=[dict(text='GHG', x=0.18, y=0.5, font_size=20, showarrow=False),
-                 dict(text='CO2', x=0.82, y=0.5, font_size=20, showarrow=False)])
+    
+    fig.update_layout(    title_text="Global Emissions 1990-2011")
     
     return fig
 
