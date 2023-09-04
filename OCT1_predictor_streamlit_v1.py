@@ -474,7 +474,7 @@ def final_plot(final_file):
     keys = ["Substrate - High confidence", "Substrate - Medium confidence", "Non Substrate - High confidence", "Non Substrate - Medium confidence", "Non conclusive"]
     fig = go.Figure(go.Pie(labels=keys, values=[substrates_hc, substrates_mc, non_substrates_hc, non_substrates_mc, non_conclusives]))
     
-    fig.update_layout(plot_bgcolor = 'rgb(256,256,256)',  title = "GOLA", title_text = "HOLA",
+    fig.update_layout(plot_bgcolor = 'rgb(256,256,256)',  title = None, title_text = None,
                             title_font = dict(size=25, family='Calibri', color='black'),
                             font =dict(size=20, family='Calibri'),
                             legend_title_font = dict(size=18, family='Calibri', color='black'),
@@ -510,7 +510,7 @@ if uploaded_file_1 is not None:
             st.header("Predictions")
             st.write(styled_df)
         with col2:
-            #st.header("Resume")
+            st.header("Resume")
             st.plotly_chart(figure,use_container_width=True)
         st.markdown(":point_down: **Here you can download the results**", unsafe_allow_html=True)
         st.markdown(filedownload1(final_file), unsafe_allow_html=True)
