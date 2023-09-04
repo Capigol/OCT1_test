@@ -27,12 +27,6 @@ import io
 import base64
 
 
-#%% Necessary files and directory
-
-file = "example_file.txt" # A .txt file with SMILES without headers.
-
-score_threshold = 0.44
-
 #%% PAGE CONFIG
 
 #---------------------------------#
@@ -51,7 +45,7 @@ image = Image.open('cropped-header.png')
 st.image(image)
 
 st.write("[![Website](https://img.shields.io/badge/website-LIDeB-blue)](https://lideb.biol.unlp.edu.ar)[![Twitter Follow](https://img.shields.io/twitter/follow/LIDeB_UNLP?style=social)](https://twitter.com/intent/follow?screen_name=LIDeB_UNLP)")
-st.subheader(":pushpin:" "About Us")
+st.subheader(📌 "About Us")
 st.markdown("We are a drug discovery team with an interest in the development of publicly available open-source customizable cheminformatics tools to be used in computer-assisted drug discovery. We belong to the Laboratory of Bioactive Research and Development (LIDeB) of the National University of La Plata (UNLP), Argentina. Our research group is focused on computer-guided drug repurposing and rational discovery of new drug candidates to treat epilepsy and neglected tropical diseases.")
 
 
@@ -443,7 +437,7 @@ def predictions(loaded_model, loaded_desc, X_final1):
     palancas_final3['Confidence3'] = (palancas_final3.sum(axis=1) / len(palancas_final3.columns)) * 100
 
     score_ensemble = dataframe_scores.min(axis=1)
-    classification = score_ensemble >= score_threshold
+    classification = score_ensemble >= 0.44
     classification = classification.replace({True: 'Substrate', False: 'Non Substrate'})
     
     final_file = pd.concat([classification,palancas_final2['Confidence'], palancas_final3['Confidence3']], axis=1)
