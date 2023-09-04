@@ -82,7 +82,7 @@ st.image(image, caption='OCT1 substrate predictor workflow')
 # Sidebar - Collects user input features into dataframe
 st.sidebar.header('Upload your SMILES')
 st.sidebar.markdown("""
-  [Example TXT input file]("https://raw.githubusercontent.com/Capigol/OCT1_test/main/smiles_train_neutro.txt")        
+  [Example TXT input file]("https://raw.githubusercontent.com/Capigol/OCT1_test/main/example_file.txt")        
 """)
 
 uploaded_file_1 = st.sidebar.file_uploader("Upload a TXT file with one SMILES per line", type=["txt"])
