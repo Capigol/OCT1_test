@@ -474,11 +474,17 @@ def final_plot(final_file):
     keys = ["Substrate - High confidence", "Substrate - Medium confidence", "Non Substrate - High confidence", "Non Substrate - Medium confidence", "Non conclusive"]
     fig = go.Figure(go.Pie(labels=keys, values=[substrates_hc, substrates_mc, non_substrates_hc, non_substrates_mc, non_conclusives]))
     
-    fig.update_layout(plot_bgcolor = 'rgb(256,256,256)',  layout_title_text='Van Gogh',
-                            title_font = dict(size=25, family='Calibri', color='black'),
-                            font =dict(size=20, family='Calibri'),
-                            legend_title_font = dict(size=18, family='Calibri', color='black'),
-                            legend_font = dict(size=15, family='Calibri', color='black'))
+    #fig.update_layout(plot_bgcolor = 'rgb(256,256,256)', title_text="Global Emissions 1990-2011",
+                            #title_font = dict(size=25, family='Calibri', color='black'),
+                            #font =dict(size=20, family='Calibri'),
+                            #legend_title_font = dict(size=18, family='Calibri', color='black'),
+                            #legend_font = dict(size=15, family='Calibri', color='black'))
+    fig.update_layout(
+    title_text="Global Emissions 1990-2011",
+    # Add annotations in the center of the donut pies.
+    annotations=[dict(text='GHG', x=0.18, y=0.5, font_size=20, showarrow=False),
+                 dict(text='CO2', x=0.82, y=0.5, font_size=20, showarrow=False)])
+    
     return fig
 
 
