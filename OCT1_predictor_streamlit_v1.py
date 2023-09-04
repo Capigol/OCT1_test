@@ -331,7 +331,7 @@ def calcular_descriptores(data):
 
 def applicability_domain(prediction_set_descriptors, descriptors_model):
     
-    descr_training = pd.read_csv(r"models\OCT1_training_DA.csv")
+    descr_training = pd.read_csv("models/" + "OCT1_training_DA.csv")
     desc = descr_training[descriptors_model]
     t_transpuesto = desc.T
     multi = t_transpuesto.dot(desc)
@@ -497,8 +497,8 @@ def filedownload1(df):
 
 #%% CORRIDA
 
-loaded_model = pickle.load(open(r"models\OCT1_models.pickle", 'rb'))
-loaded_desc = pickle.load(open(r"models\OCT1_descriptors.pickle", 'rb'))
+loaded_model = pickle.load(open("models/" + "OCT1_models.pickle", 'rb'))
+loaded_desc = pickle.load(open("models/" + "OCT1_descriptors.pickle", 'rb'))
 
 
 if uploaded_file_1 is not None:
