@@ -474,10 +474,10 @@ def final_plot(final_file):
     keys = ["Substrate - High confidence", "Substrate - Medium confidence", "Non Substrate - High confidence", "Non Substrate - Medium confidence", "Non conclusive"]
     fig = go.Figure(go.Pie(labels=keys, values=[substrates_hc, substrates_mc, non_substrates_hc, non_substrates_mc, non_conclusives]))
     
-    fig.update_layout(plot_bgcolor = 'rgb(256,256,256)',  title = None, title_text=None,
-#                            title_font = dict(size=25, family='Calibri', color='black'),
-#                            font =dict(size=20, family='Calibri'),
-#                            legend_title_font = dict(size=18, family='Calibri', color='black'),
+    fig.update_layout(plot_bgcolor = 'rgb(256,256,256)',  title = "eee", title_text="Dale",
+                            title_font = dict(size=25, family='Calibri', color='black'),
+                            font =dict(size=20, family='Calibri'),
+                            legend_title_font = dict(size=18, family='Calibri', color='black'),
                             legend_font = dict(size=15, family='Calibri', color='black'))
     
     return fig
