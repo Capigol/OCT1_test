@@ -526,7 +526,7 @@ if uploaded_file_1 is not None:
 else:
     st.info('👈🏼👈🏼👈🏼      Awaiting for TXT file to be uploaded.')
     if st.button('Press to use Example Dataset'):
-        data = pd.read_csv("smiles_train_neutro.txt",sep="\t",header=None)
+        data = pd.read_csv("example_file.txt",sep="\t",header=None)
         descriptors_total, smiles_list = calcular_descriptores(data)
         X_final1, smiles_final = all_correct_model(descriptors_total,loaded_desc, smiles_list)
         final_file, styled_df = predictions(loaded_model, loaded_desc, X_final1)
