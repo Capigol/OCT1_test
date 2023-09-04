@@ -64,10 +64,11 @@ st.write("""
 
 **It is a free web-application for  Organic cation transporter 1​ (OCT1) Substrate Prediction**
 
-OCT1 is primarily a hepatic uptake transporter, expressed on the sinusoidal membrane (blood side) of hepatocytes.
-It plays a key role in the disposition and hepatic clearance of mostly cationic drugs and endogenous compounds (https://www.solvobiotech.com/transporters/oct1)
+The Organic Cation Transporters (OCTs) are members of the Solute Carrier (SLC) group of transporters, and belong to the Major Facilitator superfamily. According to the Human Genome Organization, they are assigned to the SLC22A family, that includes electrogenic and electroneutral organic cation transporters, and also the Organic Anion Transporters (OATs) a large group of carriers involved in the uptake of organic anions. 
+OCTs are multispecific, bidirectional carriers that transport organic cations, they are also critically involved in absorption, disposition and excretion of many exogenous compounds. In humans, organic cation transporters from the SLC22A family include OCT1 (SLC22A1), OCT2 (SLC22A2), OCT3 (SLC22A3), 
+OCT1 is mainly found in the liver (basolateral membrane of hepatocytes). Low expression levels OCT1 is also detected in other tissues including the intestines, kidney, lung, and brain.
 
-Why is important predict if a molecule is a OCT1 substrate??? 
+Why is important predict if a molecule is a OCT1 substrate?
 Numerous clinically relevant drugs (e.g. metformin, morphine, fenoterol, sumatriptan, tramadol and tropisetron) have been shown to be substrates of OCT1, and OCT1 deficiency has been shown to affect the pharmacokinetics, efficacy, or toxicity of these drugs.
 (https://www.frontiersin.org/research-topics/11452/organic-cation-transporter-1-oct1-not-vital-for-life-but-of-substantial-biomedical-relevance)
 
@@ -517,7 +518,7 @@ if uploaded_file_1 is not None:
         with col2:
             st.header("Resume")
             st.plotly_chart(figure,use_container_width=True)
-        st.markdown(":point_down: **Here you can download the model results**", unsafe_allow_html=True)
+        st.markdown(":point_down: **Here you can download the results**", unsafe_allow_html=True)
         st.markdown(filedownload1(final_file), unsafe_allow_html=True)
        
 
@@ -538,7 +539,7 @@ else:
             st.header("Resume")
             st.plotly_chart(figure,use_container_width=True)
   
-        st.markdown(":point_down: **Here you can download the model results**", unsafe_allow_html=True)
+        st.markdown(":point_down: **Here you can download the results**", unsafe_allow_html=True)
         st.markdown(filedownload1(final_file), unsafe_allow_html=True)
 
 #Footer edit
@@ -565,7 +566,11 @@ text-align: center;
 }
 </style>
 <div class="footer">
-<p>Made in  🐍 and <img style='display: ; ' href="https://streamlit.io" src="https://i.imgur.com/iIOA6kU.png" target="_blank"></img> Developed with ❤️ by <a style='display: ; text-align: center' href="https://twitter.com/maxifallico" target="_blank">Maximiliano Fallico</a> for <a style='display:; text-align: center' href="https://twitter.com/capigol" target="_blank">Lucas Alberca</a> and <a style='display: ; text-align: center;' href="https://lideb.biol.unlp.edu.ar/" target="_blank">LIDeB</a></p>
+<p>Made in  🐍 and <img style='display: ; ' href="https://streamlit.io" src="https://i.imgur.com/iIOA6kU.png" target="_blank"></img> Developed with ❤️ by <a style='display: ;
+ text-align: center' href="https://twitter.com/maxifallico" target="_blank">Maximiliano Fallico</a> for <a style='display:; 
+ text-align: center' href="https://twitter.com/capigol" target="_blank">Lucas Alberca</a> and <a style='display: ; 
+ text-align: center' href="https://twitter.com/carobellera" target="_blank">Caro Bellera</a> and <a style='display: ; 
+ text-align: center;' href="https://lideb.biol.unlp.edu.ar/" target="_blank">LIDeB</a></p>
 </div>
 """
 st.markdown(footer,unsafe_allow_html=True)
