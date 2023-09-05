@@ -56,17 +56,21 @@ st.title(':computer: _OCT1 Substrate predictor_ ')
 
 st.write("""
 
-**It is a free web-application for  Organic cation transporter 1​ (OCT1) Substrate Prediction**
+**It is a free web-application for Organic cation transporter 1 (OCT1) Substrate Prediction**
 
-The Organic Cation Transporters (OCTs) are members of the Solute Carrier (SLC) group of transporters, and belong to the Major Facilitator superfamily. According to the Human Genome Organization, they are assigned to the SLC22A family, that includes electrogenic and electroneutral organic cation transporters, and also the Organic Anion Transporters (OATs) a large group of carriers involved in the uptake of organic anions. 
-OCTs are multispecific, bidirectional carriers that transport organic cations, they are also critically involved in absorption, disposition and excretion of many exogenous compounds. In humans, organic cation transporters from the SLC22A family include OCT1 (SLC22A1), OCT2 (SLC22A2), OCT3 (SLC22A3), 
-OCT1 is mainly found in the liver (basolateral membrane of hepatocytes). Low expression levels OCT1 is also detected in other tissues including the intestines, kidney, lung, and brain.
+Organic Cation Transporters (OCTs) are members of the Solute Carrier (SLC) group of transporters and belong to the Major Facilitator superfamily.
+According to the Human Genome Organization, they are assigned to the SLC22A family, which includes electrogenic and electroneutral organic cation transporters and Organic Anion Transporters (OATs),
+a large group of carriers involved in the uptake of organic anions. 
+OCTs are multispecific, bidirectional carriers that transport organic cations and are critically involved in the absorption, disposition, and excretion of many exogenous compounds.
+In humans, organic cation transporters from the SLC22A family include OCT1 (SLC22A1), OCT2 (SLC22A2), OCT3 (SLC22A3), OCT1 is mainly found in the liver (basolateral membrane of hepatocytes).
+Low expression levels of OCT1 have also been detected in other tissues, including the intestine, kidneys, lungs, and brain..
 
-Why is important predict if a molecule is a OCT1 substrate?
-Numerous clinically relevant drugs (e.g. metformin, morphine, fenoterol, sumatriptan, tramadol and tropisetron) have been shown to be substrates of OCT1, and OCT1 deficiency has been shown to affect the pharmacokinetics, efficacy, or toxicity of these drugs.
+Why is it important to predict whether a molecule is an OCT1 substrate? 
+Numerous clinically relevant drugs (e.g. metformin, morphine, fenoterol, sumatriptan, tramadol and tropisetron) have been shown to be substrates of OCT1, 
+and OCT1 deficiency has been shown to affect the pharmacokinetics, efficacy, or toxicity of these drugs.
 (https://www.frontiersin.org/research-topics/11452/organic-cation-transporter-1-oct1-not-vital-for-life-but-of-substantial-biomedical-relevance)
 
-OCT1 Substrate predictor is a Web App that ensemble 14 linear models to classify molecules between OCT1 substrate and OCT1 non substrate.
+The OCT1 Substrate predictor is a Web App that ensembles 14 linear models to classify molecules as OCT1 substrates or OCT1 non-substrates. 
 
 The tool uses the following packages [RDKIT](https://www.rdkit.org/docs/index.html), [Mordred](https://github.com/mordred-descriptor/mordred), [MOLVS](https://molvs.readthedocs.io/), [Openbabel](https://github.com/openbabel/openbabel)
 
